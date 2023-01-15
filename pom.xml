@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>simple-one</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <!-- jdk 版本 -->
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <ioGame.version>17.1.29</ioGame.version>
+    </properties>
+
+    <dependencies>
+        <!-- 单体应用启动 -->
+        <dependency>
+            <groupId>com.iohao.game</groupId>
+            <artifactId>bolt-run-one</artifactId>
+            <version>${ioGame.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+            编译插件
+            mvn compile
+            To compile your test sources, you'll do:
+            mvn test-compile
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <compilerVersion>${java.version}</compilerVersion>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <!-- maven 3.6.2及之后加上编译参数，可以让我们在运行期获取方法参数名称。 -->
+                    <parameters>true</parameters>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <!--
+            java 打包成 jar，https://gitee.com/iohao/iogame/issues/I5CXDU#note_11037550
+            mvnd package
+            如果没安装 mvnd 请使用
+            mvn package
+            来打包
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <!-- 绑定到package生命周期 -->
+                        <phase>package</phase>
+                        <goals>
+                            <!-- 只运行一次 -->
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.iohao.one.example.DemoApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

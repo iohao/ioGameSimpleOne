@@ -25,6 +25,7 @@ import java.util.List;
  * @date 2023-01-06
  */
 public class DemoApplication {
+
     public static void main(String[] args) {
 
         // 游戏对外服端口
@@ -35,5 +36,6 @@ public class DemoApplication {
 
         // 启动 对外服、网关服、逻辑服; 并生成游戏业务文档
         SimpleHelper.run(port, List.of(demoLogicServer));
+
     }
 }

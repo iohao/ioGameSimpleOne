@@ -12,7 +12,11 @@
         <!-- jdk 版本 -->
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <ioGame.version>17.1.29</ioGame.version>
+        <ioGame.version>17.1.31</ioGame.version>
+        <lombok.version>1.18.24</lombok.version>
+
+        <logback.version>1.2.11</logback.version>
+        <native.maven.plugin.version>0.9.19</native.maven.plugin.version>
     </properties>
 
     <dependencies>
@@ -29,6 +33,20 @@
             <version>1.5.2</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <!-- lombok 简化 java 代码 -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.projectlombok</groupId>-->
+        <!--            <artifactId>lombok</artifactId>-->
+        <!--            <version>${lombok.version}</version>-->
+        <!--            <optional>true</optional>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -67,10 +85,8 @@
                 <executions>
                     <execution>
                         <id>make-assembly</id>
-                        <!-- 绑定到package生命周期 -->
                         <phase>package</phase>
                         <goals>
-                            <!-- 只运行一次 -->
                             <goal>single</goal>
                         </goals>
                     </execution>
@@ -86,7 +102,147 @@
                     </archive>
                 </configuration>
             </plugin>
+
+            <!--
+            mvn jprotobuf:precompile
+            or
+            mvn package
+
+            https://mvnrepository.com/artifact/com.baidu/jprotobuf-precompile-plugin
+            -->
+            <plugin>
+                <groupId>com.baidu</groupId>
+                <artifactId>jprotobuf-precompile-plugin</artifactId>
+                <version>2.2.8</version>
+                <configuration>
+                    <filterClassPackage>com.iohao.one.example</filterClassPackage>
+                    <generateProtoFile>true</generateProtoFile>
+                    <compileDependencies>true</compileDependencies>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>precompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
+
     </build>
+
+    <!--    <profiles>-->
+    <!--        <profile>-->
+    <!--            <id>native</id>-->
+    <!--            <build>-->
+    <!--                <plugins>-->
+    <!--                    <plugin>-->
+    <!--                        <groupId>org.graalvm.buildtools</groupId>-->
+    <!--                        <artifactId>native-maven-plugin</artifactId>-->
+    <!--                        <version>${native.maven.plugin.version}</version>-->
+    <!--                        <extensions>true</extensions>-->
+    <!--                        <executions>-->
+    <!--                            <execution>-->
+    <!--                                <id>build-native</id>-->
+    <!--                                <goals>-->
+    <!--                                    <goal>compile-no-fork</goal>-->
+    <!--                                </goals>-->
+    <!--                                <phase>package</phase>-->
+    <!--                            </execution>-->
+    <!--                            <execution>-->
+    <!--                                <id>test-native</id>-->
+    <!--                                <goals>-->
+    <!--                                    <goal>test</goal>-->
+    <!--                                </goals>-->
+    <!--                                <phase>test</phase>-->
+    <!--                            </execution>-->
+    <!--                        </executions>-->
+    <!--                        <configuration>-->
+    <!--                            &lt;!&ndash; ... &ndash;&gt;-->
+    <!--                        </configuration>-->
+    <!--                    </plugin>-->
+    <!--                </plugins>-->
+    <!--            </build>-->
+    <!--        </profile>-->
+
+    <!--        <profile>-->
+    <!--            <id>native2</id>-->
+    <!--            <build>-->
+    <!--                <plugins>-->
+    <!--                    <plugin>-->
+
+    <!--                        <groupId>org.graalvm.nativeimage</groupId>-->
+    <!--                        <artifactId>native-image-maven-plugin</artifactId>-->
+    <!--                        <version>21.2.0</version>-->
+
+    <!--                        <executions>-->
+    <!--                            <execution>-->
+    <!--                                <goals>-->
+    <!--                                    <goal>native-image</goal>-->
+    <!--                                </goals>-->
+    <!--                                <phase>package</phase>-->
+    <!--                            </execution>-->
+    <!--                        </executions>-->
+
+    <!--                        <configuration>-->
+    <!--                            <skip>false</skip>-->
+    <!--                            <mainClass>com.iohao.one.example.DemoApplication</mainClass>-->
+    <!--                            <buildArgs>-->
+    <!--                                &#45;&#45;no-fallback-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.slf4j.MDC-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.slf4j.LoggerFactory-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.apache.log4j.helpers.Loader-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.apache.log4j.Logger-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.apache.log4j.helpers.LogLog-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.apache.log4j.LogManager-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.apache.log4j.spi.LoggingEvent-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.slf4j.impl.Log4jLoggerFactory-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.slf4j.impl.Log4jLoggerAdapter-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.eclipse.collections.api.factory.Sets-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.epoll.Epoll-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.epoll.Native-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.epoll.EpollEventArray-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.DefaultFileRegion-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.kqueue.KQueueEventArray-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.kqueue.KQueueEventLoop-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.kqueue.Native-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.unix.Errors-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.unix.IovArray-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.unix.Limits-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.unix.Socket-->
+    <!--                                &#45;&#45;initialize-at-run-time=io.netty.channel.ChannelHandlerMask-->
+
+    <!--                                &#45;&#45;initialize-at-build-time=org.springframework.util.unit.DataSize-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.slf4j.MDC-->
+    <!--                                &#45;&#45;initialize-at-build-time=ch.qos.logback.classic.Level-->
+    <!--                                &#45;&#45;initialize-at-build-time=ch.qos.logback.classic.Logger-->
+    <!--                                &#45;&#45;initialize-at-build-time=ch.qos.logback.core.util.StatusPrinter-->
+    <!--                                &#45;&#45;initialize-at-build-time=ch.qos.logback.core.status.StatusBase-->
+    <!--                                &#45;&#45;initialize-at-build-time=ch.qos.logback.core.status.InfoStatus-->
+    <!--                                &#45;&#45;initialize-at-build-time=ch.qos.logback.core.spi.AppenderAttachableImpl-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.slf4j.LoggerFactory-->
+    <!--                                &#45;&#45;initialize-at-build-time=ch.qos.logback.core.util.Loader-->
+    <!--                                &#45;&#45;initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder-->
+    <!--                                &#45;&#45;initialize-at-build-time=ch.qos.logback.classic.spi.ThrowableProxy-->
+    <!--                                &#45;&#45;initialize-at-build-time=ch.qos.logback.core.CoreConstants-->
+
+    <!--                                &#45;&#45;report-unsupported-elements-at-runtime-->
+    <!--                                &#45;&#45;allow-incomplete-classpath-->
+    <!--                                &#45;&#45;enable-url-protocols=http-->
+    <!--                                -H:+ReportExceptionStackTraces-->
+    <!--                            </buildArgs>-->
+    <!--                        </configuration>-->
+
+    <!--                    </plugin>-->
+    <!--                </plugins>-->
+    <!--            </build>-->
+    <!--        </profile>-->
+
+    <!--    </profiles>-->
 
 </project>

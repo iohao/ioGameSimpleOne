@@ -19,9 +19,11 @@ package com.iohao.one.example;
 import com.iohao.game.action.skeleton.core.DataCodecKit;
 import com.iohao.game.bolt.broker.client.external.bootstrap.ExternalKit;
 import com.iohao.game.bolt.broker.client.external.bootstrap.message.ExternalMessage;
+import com.iohao.game.common.kit.log.IoGameLoggerFactory;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
+import org.slf4j.Logger;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -31,6 +33,7 @@ import java.nio.ByteBuffer;
  * @date 2023-01-06
  */
 public class DemoWebsocketClient {
+    static final Logger log = IoGameLoggerFactory.getLoggerCommonStdout();
 
     public static void main(String[] args) throws Exception {
         // 这里模拟游戏客户端
@@ -40,7 +43,7 @@ public class DemoWebsocketClient {
 
         WebSocketClient webSocketClient = new WebSocketClient(new URI(wsUrl), new Draft_6455()) {
             @Override
-            public void onOpen(ServerHandshake handshakedata) {
+            public void onOpen(ServerHandshake serverHandshake) {
                 // 建立连接后 发送一条消息给游戏服务器
                 HelloReq helloReq = new HelloReq();
                 helloReq.name = "塔姆";
@@ -77,12 +80,12 @@ public class DemoWebsocketClient {
                 // 接收服务器返回的消息
                 byte[] dataContent = byteBuffer.array();
                 ExternalMessage message = DataCodecKit.decode(dataContent, ExternalMessage.class);
-//                log.info("收到消息 ExternalMessage ========== \n{}", message);
+                log.info("收到消息 ExternalMessage ========== \n{}", message);
                 byte[] data = message.getData();
+
                 if (data != null) {
                     HelloReq helloReq = DataCodecKit.decode(data, HelloReq.class);
-//                    log.info("helloReq ========== \n{}", helloReq);
-                    System.out.println("helloReq ========= \n" + helloReq);
+                    log.info("helloReq ========== \n{}", helloReq);
                 }
             }
         };

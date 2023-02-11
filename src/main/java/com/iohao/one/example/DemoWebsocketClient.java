@@ -64,18 +64,6 @@ public class DemoWebsocketClient {
             }
 
             @Override
-            public void onMessage(String message) {
-            }
-
-            @Override
-            public void onClose(int code, String reason, boolean remote) {
-            }
-
-            @Override
-            public void onError(Exception ex) {
-            }
-
-            @Override
             public void onMessage(ByteBuffer byteBuffer) {
                 // 接收服务器返回的消息
                 byte[] dataContent = byteBuffer.array();
@@ -87,6 +75,18 @@ public class DemoWebsocketClient {
                     HelloReq helloReq = DataCodecKit.decode(data, HelloReq.class);
                     log.info("helloReq ========== \n{}", helloReq);
                 }
+            }
+
+            @Override
+            public void onMessage(String message) {
+            }
+
+            @Override
+            public void onClose(int code, String reason, boolean remote) {
+            }
+
+            @Override
+            public void onError(Exception ex) {
             }
         };
 

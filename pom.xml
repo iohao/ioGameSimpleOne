@@ -12,7 +12,8 @@
         <!-- jdk 版本 -->
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <ioGame.version>17.1.31</ioGame.version>
+        <!-- 将xxx 替换成最新的 ioGame 版本 -->
+        <ioGame.version>17.1.32</ioGame.version>
         <lombok.version>1.18.24</lombok.version>
 
         <logback.version>1.2.11</logback.version>
@@ -40,13 +41,6 @@
             <version>${logback.version}</version>
         </dependency>
 
-        <!-- lombok 简化 java 代码 -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.projectlombok</groupId>-->
-        <!--            <artifactId>lombok</artifactId>-->
-        <!--            <version>${lombok.version}</version>-->
-        <!--            <optional>true</optional>-->
-        <!--        </dependency>-->
     </dependencies>
 
     <build>

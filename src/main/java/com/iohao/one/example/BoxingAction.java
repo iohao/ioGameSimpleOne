@@ -21,11 +21,6 @@ import com.iohao.game.action.skeleton.annotation.ActionMethod;
 
 /**
  * 装箱、拆箱示例
- * <pre>
- *     框架支持基础类型的装箱、拆箱
- *
- *     <a href="https://www.yuque.com/iohao/game/ieimzn">业务参数自动装箱、拆箱基础类型文档</a>
- * </pre>
  *
  * @author 渔民小镇
  * @date 2023-02-11
@@ -34,6 +29,10 @@ import com.iohao.game.action.skeleton.annotation.ActionMethod;
 public class BoxingAction {
     @ActionMethod(10)
     public int int2int(int value) {
+        /*
+         * 业务参数自动装箱、拆箱基础类型文档
+         * https://www.yuque.com/iohao/game/ieimzn
+         */
         return value + 1;
     }
 

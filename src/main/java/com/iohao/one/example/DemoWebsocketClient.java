@@ -97,7 +97,7 @@ public class DemoWebsocketClient {
         int cmdMerge = externalMessage.getCmdMerge();
         this.consumerCallbackMap.put(cmdMerge, consumerCallback);
 
-        // 转为 pb 字节
+        // 将游戏对外服协议转为 pb 字节
         byte[] bytes = DataCodecKit.encode(externalMessage);
 
         // 发送数据到游戏服务器
@@ -150,6 +150,6 @@ public class DemoWebsocketClient {
         };
 
         // 开始连接服务器
-        webSocketClient.connect();
+        this.webSocketClient.connect();
     }
 }

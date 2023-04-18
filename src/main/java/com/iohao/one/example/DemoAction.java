@@ -20,6 +20,9 @@ import com.iohao.game.action.skeleton.annotation.ActionController;
 import com.iohao.game.action.skeleton.annotation.ActionMethod;
 import com.iohao.game.action.skeleton.core.exception.MsgException;
 
+import java.util.List;
+import java.util.stream.IntStream;
+
 /**
  * @author 渔民小镇
  * @date 2023-01-06
@@ -55,5 +58,20 @@ public class DemoAction {
         helloReq.name = helloReq.name + ", hello, jackson !";
 
         return helloReq;
+    }
+
+    /**
+     * 示例 返回 List 数据
+     *
+     * @return list
+     */
+    @ActionMethod(2)
+    public List<HelloReq> list() {
+        // 得到一个 List 列表数据，并返回给请求端
+        return IntStream.range(1, 5).mapToObj(id -> {
+            HelloReq helloReq = new HelloReq();
+            helloReq.name = "data:" + id;
+            return helloReq;
+        }).toList();
     }
 }

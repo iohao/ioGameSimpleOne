@@ -16,11 +16,11 @@
  */
 package com.iohao.one.example;
 
-import com.iohao.game.action.skeleton.core.CmdKit;
 import com.iohao.game.action.skeleton.core.DataCodecKit;
-import com.iohao.game.action.skeleton.protocol.wrapper.ByteValueList;
+import com.iohao.game.action.skeleton.protocol.wrapper.IntValue;
 import com.iohao.game.bolt.broker.client.external.bootstrap.ExternalKit;
 import com.iohao.game.bolt.broker.client.external.bootstrap.message.ExternalMessage;
+import com.iohao.game.common.kit.ExecutorKit;
 import com.iohao.game.common.kit.log.IoGameLoggerFactory;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
@@ -32,6 +32,9 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -48,48 +51,36 @@ public class DemoWebsocketClient {
         DemoWebsocketClient demoWebsocketClient = new DemoWebsocketClient();
         demoWebsocketClient.connect();
         // 发送数据到服务器
-        demoWebsocketClient.sendMsg();
+        demoWebsocketClient.testOrderMsg();
     }
 
-    void sendMsg() {
+    void testOrderMsg() {
+        AtomicInteger theIntValue = new AtomicInteger();
+        AtomicInteger atomicInteger = new AtomicInteger();
+        AtomicBoolean atomicBoolean = new AtomicBoolean();
+
         // 游戏框架内置的协议， 与游戏前端相互通信的协议
-        ExternalMessage externalMessage;
-
-        // ---------------- 发送请求 1-0 ----------------
-        HelloReq helloReq = new HelloReq();
-        helloReq.name = "塔姆";
-
-        // 路由、子路由、业务数据
-        externalMessage = ExternalKit.createExternalMessage(1, 0, helloReq);
-        // 发送请求、回调
-        sendMsg(externalMessage, data -> {
-            HelloReq value = DataCodecKit.decode(data, HelloReq.class);
-            log.info("value : {}", value);
-        });
-
-        // ---------------- 发送请求 1-1 ----------------
-
-        // 路由、子路由、业务数据
-        externalMessage = ExternalKit.createExternalMessage(1, 1, helloReq);
-        // 发送请求、回调
-        sendMsg(externalMessage, data -> {
-            // 不会进入到这里，因为发生了异常。 1-1 action 的逻辑要求 name 必须是 jackson。
-            HelloReq value = DataCodecKit.decode(data, HelloReq.class);
-            log.info("value : {}", value);
-        });
-
-        // ---------------- 发送请求 1-2 ----------------
-
         // 路由、子路由
-        externalMessage = ExternalKit.createExternalMessage(1, 2);
+        ExternalMessage externalMessage = ExternalKit.createExternalMessage(1, 3);
         // 发送请求、回调
         sendMsg(externalMessage, data -> {
-            // 因为服务器返回的是 List， 当 action 返回值是 List 时，框架会使用 ByteValueList 来包装
-            ByteValueList byteValueList = DataCodecKit.decode(data, ByteValueList.class);
-            byteValueList.values.stream()
-                    .map(item -> DataCodecKit.decode(item, HelloReq.class))
-                    .forEach(helloData -> log.info("helloData : {}", helloData));
+            IntValue intValue = DataCodecKit.decode(data, IntValue.class);
+            System.out.println(intValue.value);
+
+            int i = atomicInteger.incrementAndGet();
+            if (i != intValue.value) {
+                if (atomicBoolean.compareAndSet(false, true)) {
+                    theIntValue.set(i);
+                    log.info("------乱序了-----{}", theIntValue);
+                }
+            }
         });
+
+        ExecutorKit.newSingleScheduled("s").schedule(() -> {
+            if (atomicBoolean.get()) {
+                log.info("------乱序了-----{}", theIntValue);
+            }
+        }, 1, TimeUnit.SECONDS);
     }
 
     void sendMsg(ExternalMessage externalMessage, Consumer<byte[]> consumerCallback) {
@@ -109,13 +100,14 @@ public class DemoWebsocketClient {
         var wsUrl = "ws://127.0.0.1:10100/websocket";
 
         this.webSocketClient = new WebSocketClient(new URI(wsUrl), new Draft_6455()) {
+
             @Override
             public void onMessage(ByteBuffer byteBuffer) {
                 // 接收服务器返回的消息
                 byte[] dataContent = byteBuffer.array();
                 ExternalMessage message = DataCodecKit.decode(dataContent, ExternalMessage.class);
-                System.out.println();
-                log.info("收到消息 ExternalMessage ========== \n{}", message);
+//                System.out.println();
+//                log.info("收到消息 ExternalMessage ========== \n{}", message);
                 byte[] data = message.getData();
 
                 if (data == null) {
@@ -123,7 +115,7 @@ public class DemoWebsocketClient {
                 }
 
                 int cmdMerge = message.getCmdMerge();
-                log.info("执行对应的回调 : {} - {}", CmdKit.getCmd(cmdMerge), CmdKit.getSubCmd(cmdMerge));
+//                log.info("执行对应的回调 : {} - {}", CmdKit.getCmd(cmdMerge), CmdKit.getSubCmd(cmdMerge));
                 // 执行对应的回调
                 DemoWebsocketClient
                         .this
@@ -152,4 +144,5 @@ public class DemoWebsocketClient {
         // 开始连接服务器
         this.webSocketClient.connect();
     }
+
 }

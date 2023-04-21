@@ -18,10 +18,9 @@ package com.iohao.one.example;
 
 import com.iohao.game.action.skeleton.annotation.ActionController;
 import com.iohao.game.action.skeleton.annotation.ActionMethod;
-import com.iohao.game.action.skeleton.core.exception.MsgException;
-
-import java.util.List;
-import java.util.stream.IntStream;
+import com.iohao.game.action.skeleton.core.CmdInfo;
+import com.iohao.game.action.skeleton.protocol.wrapper.IntValue;
+import com.iohao.game.bolt.broker.core.client.BrokerClientHelper;
 
 /**
  * @author 渔民小镇
@@ -29,49 +28,24 @@ import java.util.stream.IntStream;
  */
 @ActionController(1)
 public class DemoAction {
-    /**
-     * 示例 here 方法
-     *
-     * @param helloReq helloReq
-     * @return HelloReq
-     */
-    @ActionMethod(0)
-    public HelloReq here(HelloReq helloReq) {
-        HelloReq newHelloReq = new HelloReq();
-        newHelloReq.name = helloReq.name + ", I'm here ";
-        return newHelloReq;
-    }
+    @ActionMethod(3)
+    public void order() {
 
-    /**
-     * 示例 异常机制演示
-     *
-     * @param helloReq helloReq
-     * @return HelloReq
-     */
-    @ActionMethod(1)
-    public HelloReq jackson(HelloReq helloReq) {
-        String jacksonName = "jackson";
-        if (!jacksonName.equals(helloReq.name)) {
-            throw new MsgException(100, "异常机制测试，name 必须是 jackson !");
+        // 模拟 所有玩家准备 -> 开始游戏 -> 发牌 业务
+        var broadcastContext = BrokerClientHelper.getBroadcastOrderContext();
+
+        CmdInfo cmdInfo = CmdInfo.getCmdInfo(1, 3);
+        for (int i = 1; i <= 100; i++) {
+            IntValue intValue = new IntValue();
+            intValue.value = i;
+
+            broadcastContext.broadcastOrder(cmdInfo, intValue);
         }
 
-        helloReq.name = helloReq.name + ", hello, jackson !";
+//        BrokerClientItem item = (BrokerClientItem) broadcastContext;
+//        Channel channel = item.getConnection().getChannel();
+//        String shortText = channel.id().asShortText();
+//        System.out.println(shortText);
 
-        return helloReq;
-    }
-
-    /**
-     * 示例 返回 List 数据
-     *
-     * @return list
-     */
-    @ActionMethod(2)
-    public List<HelloReq> list() {
-        // 得到一个 List 列表数据，并返回给请求端
-        return IntStream.range(1, 5).mapToObj(id -> {
-            HelloReq helloReq = new HelloReq();
-            helloReq.name = "data:" + id;
-            return helloReq;
-        }).toList();
     }
 }

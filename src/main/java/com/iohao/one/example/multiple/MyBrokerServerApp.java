@@ -1,6 +1,6 @@
 /*
  * # iohao.com . 渔民小镇
- * Copyright (C) 2021 - 2022 double joker （262610965@qq.com） . All Rights Reserved.
+ * Copyright (C) 2021 - 2023 double joker （262610965@qq.com） . All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.iohao.one.example;
+package com.iohao.one.example.multiple;
 
-import com.iohao.game.simple.SimpleHelper;
 
-import java.util.List;
+import com.iohao.game.bolt.broker.server.BrokerServer;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 渔民小镇
- * @date 2023-01-06
+ * @date 2023-04-24
  */
-public class DemoApplication {
+public class MyBrokerServerApp {
+    public static void main(String[] args) throws InterruptedException {
+        /*
+         * 2 BroadcastOrderMessageBrokerProcessor.java
+         */
 
-    public static void main(String[] args) {
+        BrokerServer brokerServer = BrokerServer.newBuilder().build();
 
-        // 游戏对外服端口
-        int port = 10100;
+        brokerServer.startup();
 
-        // 逻辑服
-        var demoLogicServer = new DemoLogicServer();
-
-        // 启动 对外服、网关服、逻辑服; 并生成游戏业务文档
-        SimpleHelper.run(port, List.of(demoLogicServer));
-
+        TimeUnit.SECONDS.sleep(11);
     }
 }

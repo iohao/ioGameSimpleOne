@@ -16,6 +16,7 @@
  */
 package com.iohao.one.example;
 
+import com.alipay.remoting.rpc.RpcConfigs;
 import com.iohao.game.simple.SimpleHelper;
 
 import java.util.List;
@@ -27,6 +28,8 @@ import java.util.List;
 public class DemoApplication {
 
     public static void main(String[] args) {
+        // https://github.com/sofastack/sofa-bolt/issues/298
+//        System.setProperty(RpcConfigs.DISPATCH_MSG_LIST_IN_DEFAULT_EXECUTOR,"false");
 
         // 游戏对外服端口
         int port = 10100;

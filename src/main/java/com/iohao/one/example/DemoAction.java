@@ -16,6 +16,7 @@
  */
 package com.iohao.one.example;
 
+import com.alipay.remoting.rpc.RpcConfigs;
 import com.iohao.game.action.skeleton.annotation.ActionController;
 import com.iohao.game.action.skeleton.annotation.ActionMethod;
 import com.iohao.game.action.skeleton.core.CmdInfo;
@@ -31,11 +32,10 @@ public class DemoAction {
     @ActionMethod(3)
     public void order() {
 
-        // 模拟 所有玩家准备 -> 开始游戏 -> 发牌 业务
         var broadcastContext = BrokerClientHelper.getBroadcastOrderContext();
 
         CmdInfo cmdInfo = CmdInfo.getCmdInfo(1, 3);
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= 200; i++) {
             IntValue intValue = new IntValue();
             intValue.value = i;
 

@@ -31,8 +31,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author 渔民小镇
@@ -84,12 +86,25 @@ public class DemoWebsocketClient {
         externalMessage = ExternalKit.createExternalMessage(1, 2);
         // 发送请求、回调
         sendMsg(externalMessage, data -> {
+            // ## 获取数据方式一
             // 因为服务器返回的是 List， 当 action 返回值是 List 时，框架会使用 ByteValueList 来包装
             ByteValueList byteValueList = DataCodecKit.decode(data, ByteValueList.class);
             byteValueList.values.stream()
                     .map(item -> DataCodecKit.decode(item, HelloReq.class))
                     .forEach(helloData -> log.info("helloData : {}", helloData));
+
+            // ## 获取数据方式二
+            List<HelloReq> list = map(data, HelloReq.class);
+            log.info("list : {}", list);
         });
+    }
+
+    private <T> List<T> map(byte[] data, Class<T> cls) {
+        ByteValueList byteValueList = DataCodecKit.decode(data, ByteValueList.class);
+        // 将二进制列表转为实际业务对象列表
+        return byteValueList.values.stream()
+                .map(item -> DataCodecKit.decode(item, cls))
+                .collect(Collectors.toList());
     }
 
     void sendMsg(ExternalMessage externalMessage, Consumer<byte[]> consumerCallback) {

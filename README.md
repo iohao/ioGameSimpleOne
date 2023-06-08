@@ -8,8 +8,6 @@ https://www.yuque.com/iohao/game/zm6qg2
 
 https://www.yuque.com/iohao/game/pe7gig
 
-这个示例中，lombok 不是必须的。
-
 
 
 **运行步骤**

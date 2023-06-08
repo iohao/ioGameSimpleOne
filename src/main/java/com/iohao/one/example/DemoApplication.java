@@ -28,7 +28,7 @@ public class DemoApplication {
 
     public static void main(String[] args) {
 
-        // 游戏对外服端口D
+        // 游戏对外服端口
         int port = 10100;
 
         // 逻辑服

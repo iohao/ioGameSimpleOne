@@ -21,7 +21,6 @@ package com.iohao.one.example.client;
 
 
 import com.iohao.game.action.skeleton.protocol.wrapper.ByteValueList;
-import com.iohao.game.common.kit.InternalKit;
 import com.iohao.game.common.kit.log.IoGameLoggerFactory;
 import com.iohao.game.external.client.AbstractInputCommandRegion;
 import com.iohao.one.example.DemoCmd;
@@ -42,19 +41,7 @@ public class DemoRegion extends AbstractInputCommandRegion {
         // 模拟请求的主路由
         inputCommandCreate.cmd = DemoCmd.cmd;
 
-        // 配置一些模拟请求
-        initCommand();
-
-        // 一秒后，执行模拟请求;
-        InternalKit.newTimeoutSeconds(timeout -> {
-            // 执行 here、jackson、list 请求
-            ofRequestCommand(DemoCmd.here).request();
-            ofRequestCommand(DemoCmd.jackson).request();
-            ofRequestCommand(DemoCmd.list).request();
-        });
-    }
-
-    void initCommand() {
+        // 模拟请求参数
         HelloReq helloReq = new HelloReq();
         helloReq.name = "塔姆";
 

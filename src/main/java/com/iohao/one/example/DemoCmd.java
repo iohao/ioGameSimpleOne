@@ -24,9 +24,12 @@ package com.iohao.one.example;
  * @date 2023-07-17
  */
 public interface DemoCmd {
+    /** 主路由 */
     int cmd = 1;
-
+    /** 子路由 here */
     int here = 0;
+    /** 子路由 jackson */
     int jackson = 1;
+    /** 子路由 list */
     int list = 2;
 }

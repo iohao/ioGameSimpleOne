@@ -35,6 +35,7 @@
             <version>${logback.version}</version>
         </dependency>
 
+        <!-- 压测&模拟客户端请求模块 -->
         <dependency>
             <groupId>com.iohao.game</groupId>
             <artifactId>light-client</artifactId>

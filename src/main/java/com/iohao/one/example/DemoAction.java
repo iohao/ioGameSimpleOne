@@ -27,7 +27,7 @@ import java.util.stream.IntStream;
  * @author 渔民小镇
  * @date 2023-01-06
  */
-@ActionController(1)
+@ActionController(DemoCmd.cmd)
 public class DemoAction {
     /**
      * 示例 here 方法
@@ -35,7 +35,7 @@ public class DemoAction {
      * @param helloReq helloReq
      * @return HelloReq
      */
-    @ActionMethod(0)
+    @ActionMethod(DemoCmd.here)
     public HelloReq here(HelloReq helloReq) {
         HelloReq newHelloReq = new HelloReq();
         newHelloReq.name = helloReq.name + ", I'm here ";
@@ -48,7 +48,7 @@ public class DemoAction {
      * @param helloReq helloReq
      * @return HelloReq
      */
-    @ActionMethod(1)
+    @ActionMethod(DemoCmd.jackson)
     public HelloReq jackson(HelloReq helloReq) {
         String jacksonName = "jackson";
         if (!jacksonName.equals(helloReq.name)) {
@@ -65,7 +65,7 @@ public class DemoAction {
      *
      * @return list
      */
-    @ActionMethod(2)
+    @ActionMethod(DemoCmd.list)
     public List<HelloReq> list() {
         // 得到一个 List 列表数据，并返回给请求端
         return IntStream.range(1, 5).mapToObj(id -> {

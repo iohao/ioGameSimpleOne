@@ -31,4 +31,6 @@ public interface DemoCmd {
     int jackson = 1;
     /** 子路由 list */
     int list = 2;
+    int listenValue = 4;
+    int listenList = 5;
 }

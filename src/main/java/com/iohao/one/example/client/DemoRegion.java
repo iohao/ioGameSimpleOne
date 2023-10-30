@@ -19,12 +19,11 @@
 package com.iohao.one.example.client;
 
 
-import com.iohao.game.action.skeleton.protocol.wrapper.ByteValueList;
-import com.iohao.game.common.kit.log.IoGameLoggerFactory;
 import com.iohao.game.external.client.AbstractInputCommandRegion;
 import com.iohao.one.example.DemoCmd;
 import com.iohao.one.example.HelloReq;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -33,36 +32,50 @@ import java.util.List;
  * @date 2023-07-17
  */
 public class DemoRegion extends AbstractInputCommandRegion {
-    static final Logger log = IoGameLoggerFactory.getLoggerCommonStdout();
+    static final Logger log = LoggerFactory.getLogger(DemoRegion.class);
 
     @Override
     public void initInputCommand() {
         // 模拟请求的主路由
         inputCommandCreate.cmd = DemoCmd.cmd;
 
-        // 模拟请求参数
-        HelloReq helloReq = new HelloReq();
-        helloReq.name = "塔姆";
-
         // ---------------- 模拟请求 1-0 ----------------
-        ofCommand(DemoCmd.here).callback(HelloReq.class, result -> {
-            HelloReq value = result.getValue();
+        ofCommand(DemoCmd.here).setTitle("here").setRequestData(() -> {
+            HelloReq helloReq = new HelloReq();
+            helloReq.name = "1";
+            return helloReq;
+        }).callback(result -> {
+            HelloReq value = result.getValue(HelloReq.class);
             log.info("value : {}", value);
-        }).setDescription("here").setRequestData(helloReq);
+        });
 
         // ---------------- 模拟请求 1-1 ----------------
-        ofCommand(DemoCmd.jackson).callback(HelloReq.class, result -> {
+        ofCommand(DemoCmd.jackson).setTitle("jackson").setRequestData(() -> {
+            HelloReq helloReq = new HelloReq();
+            helloReq.name = "1";
+            return helloReq;
+        }).callback(result -> {
             // 不会进入到这里，因为发生了异常。 1-1 action 的逻辑要求 name 必须是 jackson。
-            HelloReq value = result.getValue();
+            HelloReq value = result.getValue(HelloReq.class);
             log.info("value : {}", value);
-        }).setDescription("jackson").setRequestData(helloReq);
+        });
 
         // ---------------- 模拟请求 1-2 ----------------
         // 因为服务器返回的是 List， 当 action 返回值是 List 时，框架会使用 ByteValueList 来包装
-        ofCommand(DemoCmd.list).callback(ByteValueList.class, result -> {
+        ofCommand(DemoCmd.list).setTitle("list").callback(result -> {
             // 得到 list 数据
-            List<HelloReq> list = result.toList(HelloReq.class);
+            List<HelloReq> list = result.listValue(HelloReq.class);
             log.info("list : {}", list);
-        }).setDescription("list");
+        });
+
+        ofListen(result -> {
+            HelloReq value = result.getValue(HelloReq.class);
+            log.info("value : {}", value);
+        }, DemoCmd.listenValue, "listenValue");
+
+        ofListen(result -> {
+            List<HelloReq> helloReqList = result.listValue(HelloReq.class);
+            log.info("helloReqList : {}", helloReqList);
+        }, DemoCmd.listenList, "listenList");
     }
 }

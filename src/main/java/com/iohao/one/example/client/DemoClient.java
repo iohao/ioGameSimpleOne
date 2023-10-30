@@ -20,7 +20,6 @@ package com.iohao.one.example.client;
 
 import com.iohao.game.external.client.InputCommandRegion;
 import com.iohao.game.external.client.join.ClientRunOne;
-import com.iohao.game.external.client.kit.ClientUserConfigs;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ import java.util.List;
 public class DemoClient {
     public static void main(String[] args) {
         // 关闭模拟请求相关日志
-        ClientUserConfigs.closeLog();
+//        ClientUserConfigs.closeLog();
 
         // 模拟请求数据
         List<InputCommandRegion> inputCommandRegions = List.of(

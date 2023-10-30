@@ -20,9 +20,14 @@ package com.iohao.one.example;
 
 import com.iohao.game.action.skeleton.annotation.ActionController;
 import com.iohao.game.action.skeleton.annotation.ActionMethod;
+import com.iohao.game.action.skeleton.core.CmdInfo;
 import com.iohao.game.action.skeleton.core.exception.MsgException;
+import com.iohao.game.action.skeleton.protocol.wrapper.WrapperKit;
+import com.iohao.game.bolt.broker.core.client.BrokerClientHelper;
+import com.iohao.game.common.kit.ExecutorKit;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 /**
@@ -75,5 +80,28 @@ public class DemoAction {
             helloReq.name = "data:" + id;
             return helloReq;
         }).toList();
+    }
+
+    static {
+        Runnable runnable = () -> {
+            HelloReq helloReq = new HelloReq();
+            helloReq.name = "广播测试";
+
+            // 广播
+            BrokerClientHelper
+                    .getBroadcastContext()
+                    .broadcast(CmdInfo.of(DemoCmd.cmd, DemoCmd.listenValue), helloReq);
+
+            BrokerClientHelper
+                    .getBroadcastContext()
+                    .broadcast(
+                            CmdInfo.of(DemoCmd.cmd, DemoCmd.listenList)
+                            , WrapperKit.ofListByteValue(List.of(helloReq))
+                    );
+        };
+
+        ExecutorKit
+                .newSingleScheduled("定时广播测试")
+                .scheduleAtFixedRate(runnable, 5, 30, TimeUnit.SECONDS);
     }
 }

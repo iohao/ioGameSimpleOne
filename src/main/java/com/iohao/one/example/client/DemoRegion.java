@@ -61,13 +61,13 @@ public class DemoRegion extends AbstractInputCommandRegion {
         });
 
         // ---------------- 模拟请求 1-2 ----------------
-        // 因为服务器返回的是 List， 当 action 返回值是 List 时，框架会使用 ByteValueList 来包装
         ofCommand(DemoCmd.list).setTitle("list").callback(result -> {
-            // 得到 list 数据
+            // 得到 list 数据，因为服务器返回的是 List
             List<HelloReq> list = result.listValue(HelloReq.class);
             log.info("list : {}", list);
         });
 
+        // ---------------- 广播监听 ----------------
         ofListen(result -> {
             HelloReq value = result.getValue(HelloReq.class);
             log.info("value : {}", value);

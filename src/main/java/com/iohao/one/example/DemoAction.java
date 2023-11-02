@@ -102,6 +102,6 @@ public class DemoAction {
 
         ExecutorKit
                 .newSingleScheduled("定时广播测试")
-                .scheduleAtFixedRate(runnable, 5, 30, TimeUnit.SECONDS);
+                .scheduleAtFixedRate(runnable, 5, 5, TimeUnit.SECONDS);
     }
 }

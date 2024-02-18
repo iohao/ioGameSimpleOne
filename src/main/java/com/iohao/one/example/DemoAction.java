@@ -25,6 +25,9 @@ import com.iohao.game.action.skeleton.core.exception.MsgException;
 import com.iohao.game.action.skeleton.protocol.wrapper.WrapperKit;
 import com.iohao.game.bolt.broker.core.client.BrokerClientHelper;
 import com.iohao.game.common.kit.ExecutorKit;
+import com.iohao.game.common.kit.concurrent.IntervalTaskListener;
+import com.iohao.game.common.kit.concurrent.TaskKit;
+import com.iohao.game.external.client.kit.AssertKit;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -100,8 +103,7 @@ public class DemoAction {
                     );
         };
 
-        ExecutorKit
-                .newSingleScheduled("定时广播测试")
-                .scheduleAtFixedRate(runnable, 5, 5, TimeUnit.SECONDS);
+        // 定时广播测试
+        TaskKit.runInterval(runnable::run, 5, TimeUnit.SECONDS);
     }
 }

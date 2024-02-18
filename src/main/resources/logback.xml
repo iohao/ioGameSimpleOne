@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true">
-
+<configuration debug="false">
+    <!-- 关闭 logback 启动时打印的无效日志 -->
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
     <!-- 日志级别 -->
     <property name="log.root.level" value="INFO"/>
     <!-- 其他日志级别 -->
@@ -12,8 +13,8 @@
     <property name="log.max.size" value="100MB"/> <!-- 日志文件大小,超过这个大小将被压缩 -->
 
     <!-- 彩色日志 -->
-    <property name="log.pattern" value="%cyan(%d{HH:mm:ss.SSS}) %green([%thread]) %highlight(%-5level) %cyan(%-40.40logger{50}.%method) %cyan(\\(%file:%line\\)) - %msg%n" />
-
+    <property name="log.pattern"
+              value="%d{HH:mm:ss.SSS} %green([%thread]) %highlight(%-5level) %cyan(%logger{5}).%M\(%F:%L\) %m%n"/>
     <!--控制台输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">

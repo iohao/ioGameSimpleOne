@@ -18,6 +18,9 @@
  */
 package com.iohao.one.example;
 
+import com.iohao.game.action.skeleton.core.doc.ActionDocs;
+import com.iohao.game.action.skeleton.core.doc.ActionSendDocsRegion;
+import com.iohao.game.action.skeleton.core.doc.BarSkeletonDoc;
 import com.iohao.game.external.core.netty.simple.NettySimpleHelper;
 
 import java.util.List;
@@ -32,10 +35,13 @@ public class DemoApplication {
         // 游戏对外服端口
         int port = 10100;
 
-        // 逻辑服
+        // 游戏逻辑服
         var demoLogicServer = new DemoLogicServer();
 
         // 启动 对外服、网关服、逻辑服; 并生成游戏业务文档
         NettySimpleHelper.run(port, List.of(demoLogicServer));
+
+        // 生成对接文档
+        BarSkeletonDoc.me().buildDoc();
     }
 }

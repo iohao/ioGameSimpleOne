@@ -18,8 +18,6 @@
  */
 package com.iohao.one.example;
 
-import com.iohao.game.action.skeleton.core.doc.ActionDocs;
-import com.iohao.game.action.skeleton.core.doc.ActionSendDocsRegion;
 import com.iohao.game.action.skeleton.core.doc.BarSkeletonDoc;
 import com.iohao.game.external.core.netty.simple.NettySimpleHelper;
 

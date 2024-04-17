@@ -104,6 +104,6 @@ public class DemoAction {
         };
 
         // 定时广播测试
-        TaskKit.runInterval(runnable::run, 5, TimeUnit.SECONDS);
+//        TaskKit.runInterval(runnable::run, 5, TimeUnit.SECONDS);
     }
 }

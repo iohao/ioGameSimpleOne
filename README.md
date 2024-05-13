@@ -58,3 +58,7 @@ https://www.yuque.com/iohao/game/pe7gig
 **4、启动刚打包好的镜像**
 
 > docker run --name simple-one-iogame -p 10100:10100 simple-one-iogame
+
+---
+
+[![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://iohao.github.io/ioGameSimpleOne/javadoc/)

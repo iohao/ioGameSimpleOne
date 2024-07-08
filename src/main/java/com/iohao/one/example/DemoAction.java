@@ -21,7 +21,6 @@ package com.iohao.one.example;
 import com.iohao.game.action.skeleton.annotation.ActionController;
 import com.iohao.game.action.skeleton.annotation.ActionMethod;
 import com.iohao.game.action.skeleton.core.CmdInfo;
-import com.iohao.game.action.skeleton.core.exception.MsgException;
 import com.iohao.game.action.skeleton.protocol.wrapper.WrapperKit;
 import com.iohao.game.bolt.broker.core.client.BrokerClientHelper;
 
@@ -55,10 +54,8 @@ public class DemoAction {
      */
     @ActionMethod(DemoCmd.jackson)
     public HelloReq jackson(HelloReq helloReq) {
-        String jacksonName = "jackson";
-        if (!jacksonName.equals(helloReq.name)) {
-            throw new MsgException(100, "异常机制测试，name 必须是 jackson !");
-        }
+
+        GameCode.nameChecked.assertTrue("jackson".equals(helloReq.name));
 
         helloReq.name = helloReq.name + ", hello, jackson !";
 

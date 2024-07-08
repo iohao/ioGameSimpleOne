@@ -18,7 +18,7 @@
  */
 package com.iohao.one.example;
 
-import com.iohao.game.action.skeleton.core.doc.BarSkeletonDoc;
+import com.iohao.game.action.skeleton.core.doc.IoGameDocumentHelper;
 import com.iohao.game.external.core.netty.simple.NettySimpleHelper;
 
 import java.util.List;
@@ -37,9 +37,17 @@ public class DemoApplication {
         var demoLogicServer = new DemoLogicServer();
 
         // 启动 对外服、网关服、逻辑服; 并生成游戏业务文档
+        // 这三部分在一个进程中相互使用内存通信
         NettySimpleHelper.run(port, List.of(demoLogicServer));
 
         // 生成对接文档
-        BarSkeletonDoc.me().buildDoc();
+        extractedDoc();
+    }
+
+    private static void extractedDoc() {
+        // 添加枚举错误码 class，用于生成错误码相关信息
+        IoGameDocumentHelper.addErrorCodeClass(GameCode.class);
+        // 生成文档
+        IoGameDocumentHelper.generateDocument();
     }
 }

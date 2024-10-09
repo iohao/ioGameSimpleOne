@@ -46,7 +46,7 @@ public class DemoRegion extends AbstractInputCommandRegion {
             return helloReq;
         }).callback(result -> {
             HelloReq value = result.getValue(HelloReq.class);
-            log.info("value : {}", value);
+            log.info("{}", value);
         });
 
         // ---------------- 模拟请求 1-1 ----------------
@@ -57,14 +57,14 @@ public class DemoRegion extends AbstractInputCommandRegion {
         }).callback(result -> {
             // 不会进入到这里，因为发生了异常。 1-1 action 的逻辑要求 name 必须是 jackson。
             HelloReq value = result.getValue(HelloReq.class);
-            log.info("value : {}", value);
+            log.info("{}", value);
         });
 
         // ---------------- 模拟请求 1-2 ----------------
         ofCommand(DemoCmd.list).setTitle("list").callback(result -> {
             // 得到 list 数据，因为服务器返回的是 List
             List<HelloReq> list = result.listValue(HelloReq.class);
-            log.info("list : {}", list);
+            log.info("{}", list);
         });
 
         // ---------------- 广播监听 ----------------

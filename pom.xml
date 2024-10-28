@@ -13,7 +13,7 @@
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- 将xxx 替换成最新的 ioGame 版本 -->
-        <ioGame.version>21.18</ioGame.version>
+        <ioGame.version>21.19</ioGame.version>
         <lombok.version>1.18.34</lombok.version>
 
         <logback.version>1.4.14</logback.version>
@@ -45,17 +45,6 @@
 
     <build>
         <plugins>
-            <!-- Javadoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.5.0</version>
-                <configuration>
-                    <show>private</show>
-                    <nohelp>true</nohelp>
-                </configuration>
-            </plugin>
-
             <!--
             编译插件
             mvn compile
@@ -106,32 +95,6 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
-
-            <!--
-            mvn jprotobuf:precompile
-            or
-            mvn package
-
-            https://mvnrepository.com/artifact/com.baidu/jprotobuf-precompile-plugin
-            -->
-            <plugin>
-                <groupId>com.baidu</groupId>
-                <artifactId>jprotobuf-precompile-plugin</artifactId>
-                <version>2.2.8</version>
-                <configuration>
-                    <filterClassPackage>com.iohao.one.example</filterClassPackage>
-                    <generateProtoFile>true</generateProtoFile>
-                    <compileDependencies>true</compileDependencies>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>precompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

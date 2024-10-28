@@ -41,7 +41,7 @@ public class DemoApplication {
         NettySimpleHelper.run(port, List.of(demoLogicServer));
 
         // 生成对接文档
-        extractedDoc();
+//        extractedDoc();
     }
 
     private static void extractedDoc() {

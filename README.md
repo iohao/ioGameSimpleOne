@@ -2,15 +2,7 @@
 
 **快速从零编写服务器完整示例-文档**
 
-https://www.yuque.com/iohao/game/zm6qg2
-
-
-
-**环境安装**
-
-https://www.yuque.com/iohao/game/pe7gig
-
-
+https://iohao.github.io/game/docs/quick_zero_demo
 
 **运行步骤**
 
@@ -58,7 +50,3 @@ https://www.yuque.com/iohao/game/pe7gig
 **4、启动刚打包好的镜像**
 
 > docker run --name simple-one-iogame -p 10100:10100 simple-one-iogame
-
----
-
-[![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://iohao.github.io/ioGameSimpleOne/javadoc/)

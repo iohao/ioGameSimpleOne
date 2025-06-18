@@ -36,30 +36,28 @@ public class DemoAction {
     /**
      * 示例 here 方法
      *
-     * @param helloReq helloReq
+     * @param helloMessage helloReq
      * @return HelloReq
      */
     @ActionMethod(DemoCmd.here)
-    public HelloReq here(HelloReq helloReq) {
-        HelloReq newHelloReq = new HelloReq();
-        newHelloReq.name = helloReq.name + ", I'm here ";
-        return newHelloReq;
+    public HelloMessage here(HelloMessage helloMessage) {
+        HelloMessage newHelloMessage = new HelloMessage();
+        newHelloMessage.name = helloMessage.name + ", I'm here";
+        return newHelloMessage;
     }
 
     /**
      * 示例 异常机制演示
      *
-     * @param helloReq helloReq
+     * @param helloMessage helloReq
      * @return HelloReq
      */
     @ActionMethod(DemoCmd.jackson)
-    public HelloReq jackson(HelloReq helloReq) {
+    public HelloMessage jackson(HelloMessage helloMessage) {
+        GameCode.nameChecked.assertTrue("Jackson".equals(helloMessage.name));
 
-        GameCode.nameChecked.assertTrue("jackson".equals(helloReq.name));
-
-        helloReq.name = helloReq.name + ", hello, jackson !";
-
-        return helloReq;
+        helloMessage.name = "Hello, " + helloMessage.name;
+        return helloMessage;
     }
 
     /**
@@ -68,34 +66,34 @@ public class DemoAction {
      * @return list
      */
     @ActionMethod(DemoCmd.list)
-    public List<HelloReq> list() {
+    public List<HelloMessage> list() {
         // 得到一个 List 列表数据，并返回给请求端
         return IntStream.range(1, 5).mapToObj(id -> {
-            HelloReq helloReq = new HelloReq();
-            helloReq.name = "data:" + id;
-            return helloReq;
+            HelloMessage helloMessage = new HelloMessage();
+            helloMessage.name = "data:" + id;
+            return helloMessage;
         }).toList();
     }
 
-    static {
-        Runnable runnable = () -> {
-            HelloReq helloReq = new HelloReq();
-            helloReq.name = "广播测试";
-
-            // 广播
-            BrokerClientHelper
-                    .getBroadcastContext()
-                    .broadcast(CmdInfo.of(DemoCmd.cmd, DemoCmd.listenValue), helloReq);
-
-            BrokerClientHelper
-                    .getBroadcastContext()
-                    .broadcast(
-                            CmdInfo.of(DemoCmd.cmd, DemoCmd.listenList)
-                            , WrapperKit.ofListByteValue(List.of(helloReq))
-                    );
-        };
-
-        // 定时广播测试
+//    static {
+//        Runnable runnable = () -> {
+//            HelloMessage helloMessage = new HelloMessage();
+//            helloMessage.name = "广播测试";
+//
+//            // 广播
+//            BrokerClientHelper
+//                    .getBroadcastContext()
+//                    .broadcast(CmdInfo.of(DemoCmd.cmd, DemoCmd.listenValue), helloMessage);
+//
+//            BrokerClientHelper
+//                    .getBroadcastContext()
+//                    .broadcast(
+//                            CmdInfo.of(DemoCmd.cmd, DemoCmd.listenList)
+//                            , WrapperKit.ofListByteValue(List.of(helloMessage))
+//                    );
+//        };
+//
+//        // 定时广播测试
 //        TaskKit.runInterval(runnable::run, 5, TimeUnit.SECONDS);
-    }
+//    }
 }

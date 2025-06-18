@@ -16,36 +16,46 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.iohao.one.example;
+package com.iohao.one.example.temp;
 
 import com.iohao.game.action.skeleton.core.BarSkeleton;
 import com.iohao.game.action.skeleton.core.BarSkeletonBuilderParamConfig;
 import com.iohao.game.action.skeleton.core.flow.internal.DebugInOut;
+import com.iohao.game.action.skeleton.core.flow.internal.DefaultActionAfter;
+import com.iohao.game.action.skeleton.core.flow.internal.DefaultActionMethodInvoke;
+import com.iohao.game.action.skeleton.core.flow.internal.DefaultActionMethodResultWrap;
 import com.iohao.game.bolt.broker.client.AbstractBrokerClientStartup;
 import com.iohao.game.bolt.broker.core.client.BrokerAddress;
 import com.iohao.game.bolt.broker.core.client.BrokerClient;
 import com.iohao.game.bolt.broker.core.client.BrokerClientBuilder;
 import com.iohao.game.bolt.broker.core.common.IoGameGlobalConfig;
-import com.iohao.game.common.kit.NetworkKit;
+import com.iohao.one.example.DemoAction;
 
 /**
  * @author 渔民小镇
  * @date 2023-01-06
  */
-public class DemoLogicServer extends AbstractBrokerClientStartup {
+public class DemoLogicServer2 extends AbstractBrokerClientStartup {
     @Override
     public BarSkeleton createBarSkeleton() {
-        // 业务框架构建器 配置
         var config = new BarSkeletonBuilderParamConfig()
-                // 扫描 action 类所在包
-                .scanActionPackage(DemoAction.class);
+                .setBroadcastLog(true)
+                .scanActionPackage(DemoAction.class)
+                ;
 
         // 业务框架构建器
         var builder = config.createBuilder();
 
+        builder
+//                .setActionFactoryBean(new DefaultActionFactoryBean())
+                .setActionMethodInvoke(new DefaultActionMethodInvoke())
+                .setActionMethodResultWrap(new DefaultActionMethodResultWrap())
+                .setActionAfter(new DefaultActionAfter())
+        ;
+
+
         // 添加控制台输出插件
         builder.addInOut(new DebugInOut());
-
         return builder.build();
     }
 
@@ -54,12 +64,5 @@ public class DemoLogicServer extends AbstractBrokerClientStartup {
         BrokerClientBuilder builder = BrokerClient.newBuilder();
         builder.appName("demoLogicServer");
         return builder;
-    }
-
-    @Override
-    public BrokerAddress createBrokerAddress() {
-        String localIp = "127.0.0.1";
-        int brokerPort = IoGameGlobalConfig.brokerPort;
-        return new BrokerAddress(localIp, brokerPort);
     }
 }

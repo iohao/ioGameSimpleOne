@@ -14,7 +14,7 @@
 
     <!-- 彩色日志 -->
     <property name="log.pattern"
-              value="%d{HH:mm:ss.SSS} %green([%thread]) %highlight(%-5level) %cyan(%logger{5}).%M\(%F:%L\) %m%n"/>
+              value="%d{mm:ss} %green([%-3.3thread]) %highlight(%-5level) %cyan(%logger{5}).%M\(%F:%L\) %m%n"/>
     <!--控制台输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">

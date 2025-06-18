@@ -25,12 +25,12 @@ import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
  * @date 2023-01-06
  */
 @ProtobufClass
-public class HelloReq {
+public class HelloMessage {
     public String name;
 
     @Override
     public String toString() {
-        return "HelloReq{" +
+        return "HelloMessage{" +
                 "name='" + name + '\'' +
                 '}';
     }

@@ -21,7 +21,7 @@ package com.iohao.one.example.client;
 
 import com.iohao.game.external.client.AbstractInputCommandRegion;
 import com.iohao.one.example.DemoCmd;
-import com.iohao.one.example.HelloReq;
+import com.iohao.one.example.HelloMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,46 +36,49 @@ public class DemoRegion extends AbstractInputCommandRegion {
 
     @Override
     public void initInputCommand() {
-        // 模拟请求的主路由
+        // Setting cmd. cn:设置主路由
         inputCommandCreate.cmd = DemoCmd.cmd;
 
-        // ---------------- 模拟请求 1-0 ----------------
+        // ---------------- request 1-0 ----------------
         ofCommand(DemoCmd.here).setTitle("here").setRequestData(() -> {
-            HelloReq helloReq = new HelloReq();
-            helloReq.name = "1";
-            return helloReq;
+            HelloMessage helloMessage = new HelloMessage();
+            helloMessage.name = "1";
+            return helloMessage;
         }).callback(result -> {
-            HelloReq value = result.getValue(HelloReq.class);
+            HelloMessage value = result.getValue(HelloMessage.class);
             log.info("{}", value);
         });
 
-        // ---------------- 模拟请求 1-1 ----------------
-        ofCommand(DemoCmd.jackson).setTitle("jackson").setRequestData(() -> {
-            HelloReq helloReq = new HelloReq();
-            helloReq.name = "1";
-            return helloReq;
+        // ---------------- request 1-1 ----------------
+        ofCommand(DemoCmd.jackson).setTitle("Jackson").setRequestData(() -> {
+            HelloMessage helloMessage = new HelloMessage();
+            helloMessage.name = "1";
+            return helloMessage;
         }).callback(result -> {
-            // 不会进入到这里，因为发生了异常。 1-1 action 的逻辑要求 name 必须是 jackson。
-            HelloReq value = result.getValue(HelloReq.class);
+            // We won't get in here because an exception happened.
+            // The logic for action 1-1 requires the name to be Jackson.
+            // cn: 不会进入到这里，因为发生了异常。 1-1 action 的逻辑要求 name 必须是 Jackson。
+            HelloMessage value = result.getValue(HelloMessage.class);
             log.info("{}", value);
         });
 
-        // ---------------- 模拟请求 1-2 ----------------
+        // ---------------- request 1-2 ----------------
         ofCommand(DemoCmd.list).setTitle("list").callback(result -> {
-            // 得到 list 数据，因为服务器返回的是 List
-            List<HelloReq> list = result.listValue(HelloReq.class);
+            // We get list data because the server returns a List
+            // cn: 得到 list 数据，因为服务器返回的是 List
+            List<HelloMessage> list = result.listValue(HelloMessage.class);
             log.info("{}", list);
         });
 
-        // ---------------- 广播监听 ----------------
+        // ---------------- Broadcast Listener. cn: 广播监听 ----------------
         ofListen(result -> {
-            HelloReq value = result.getValue(HelloReq.class);
-            log.info("value : {}", value);
+            HelloMessage value = result.getValue(HelloMessage.class);
+            log.info("{}", value);
         }, DemoCmd.listenValue, "listenValue");
 
         ofListen(result -> {
-            List<HelloReq> helloReqList = result.listValue(HelloReq.class);
-            log.info("helloReqList : {}", helloReqList);
+            List<HelloMessage> helloMessageList = result.listValue(HelloMessage.class);
+            log.info("{}", helloMessageList);
         }, DemoCmd.listenList, "listenList");
     }
 }

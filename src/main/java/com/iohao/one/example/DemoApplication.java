@@ -18,36 +18,23 @@
  */
 package com.iohao.one.example;
 
-import com.iohao.game.action.skeleton.core.doc.IoGameDocumentHelper;
 import com.iohao.game.external.core.netty.simple.NettySimpleHelper;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author 渔民小镇
  * @date 2023-01-06
  */
 public class DemoApplication {
-
     public static void main(String[] args) {
+        Locale.setDefault(Locale.US);
         // 游戏对外服端口
         int port = 10100;
-
         // 游戏逻辑服
         var demoLogicServer = new DemoLogicServer();
-
-        // 启动 对外服、网关服、逻辑服; 并生成游戏业务文档
-        // 这三部分在一个进程中相互使用内存通信
+        // 启动
         NettySimpleHelper.run(port, List.of(demoLogicServer));
-
-        // 生成对接文档
-//        extractedDoc();
-    }
-
-    private static void extractedDoc() {
-        // 添加枚举错误码 class，用于生成错误码相关信息
-        IoGameDocumentHelper.addErrorCodeClass(GameCode.class);
-        // 生成文档
-        IoGameDocumentHelper.generateDocument();
     }
 }

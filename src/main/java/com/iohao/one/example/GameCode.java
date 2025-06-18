@@ -28,7 +28,7 @@ import com.iohao.game.action.skeleton.core.exception.MsgExceptionInfo;
  */
 public enum GameCode implements MsgExceptionInfo {
     /** 名字检查 */
-    nameChecked(100, "异常机制测试，name 必须是 jackson !");
+    nameChecked(100, "The name must be Jackson");
 
     /** 消息码 */
     final int code;
